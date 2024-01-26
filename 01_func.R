@@ -35,13 +35,11 @@ osse <- function(mu, sigma) {
 }
 
 
-n_osse <- 1000
-# n_osse <- 10000
-
 # nonstationary GAMLSS
 # gamlss_mdl(osse_data, the_number_of_ensembles)
 gamlss_mdl <- function(data, e) {
   # extract dataset in the number of ensembles
+  n_osse <- length(data)
   index <- sample(1:n_osse, e, replace = FALSE)
   y_120 <- data[index, ]
   
@@ -77,6 +75,7 @@ gamlss_mdl <- function(data, e) {
 # gumbel_mdl(osse_data, the_number_of_ensembles)
 gumbel_mdl <- function(data, e) {
   # extract dataset in the number of ensembles
+  n_osse <- length(data)
   index <- sample(1:n_osse, e, replace = FALSE)
   y_120 <- data[index, ]
 
