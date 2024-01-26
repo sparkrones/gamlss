@@ -27,7 +27,7 @@
 
 Example:
 ```bash
-Rscript /work/a06/stakahashi/workspace/code/01_gamlss.R
+Rscript /work/a06/stakahashi/workspace/code/01_func.R
 ```
       
  - local: to install Rstudio
