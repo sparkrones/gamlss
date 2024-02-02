@@ -34,13 +34,33 @@ Rscript /work/a06/stakahashi/workspace/code/01_func.R
 
 ### GAMLSS fitting
 1. find (ix, iy) of the research point (serverにあるglbなんちゃら)
-2. extract annual max outflow (AMAX), which is calculated by CaMa-Flood, from 1980 to 2100   # 00_max_extract.py
+   - Please replace "LAT" and "LON" with latitude and longitude of your own research point
+ ```bash
+ /work/a06/stakahashi/workspace/glb_06min/get_rivinfo latlon "LAT" "LON"
+ ```
+
+2. extract annual max outflow (AMAX), which is calculated by CaMa-Flood, from 1980 to 2100
+ ```bash
+ python /work/a06/stakahashi/workspace/code/00_max_extract.py
+ ```
+
 3. estimate 100-year flood benchmark from stationary gumbel distribution
 4. fit 120 years AMAX to GAMLSS model (gumbel distribution in linear)   # 02_gamlss.R
    - non-exceedance probabilities of the benchmark 100-year flood calculated above: pGU()
    - return period (corresponding to non-exceedance prob)
    - to estimate the 100-year flood: qGU()
+ ```bash
+ Rscript /work/a06/stakahashi/workspace/code/02_gamlss.R
+ ```
+
   
 ### OSSE
-1. generate complemented 10000 dataset (only once): rGU()   # 03_osse2csv.R
-2. calculate error values in several ensembles and plot error distribution (n=100) in each ensemble   # 04_evaluation.R
+1. generate complemented 5000 dataset (execute only once): rGU()
+ ```bash
+ Rscript /work/a06/stakahashi/workspace/code/03_osse2csv.R
+ ```
+
+2. calculate error values in several ensembles and plot error distribution (n=100) in each ensemble
+ ```bash
+ Rscript /work/a06/stakahashi/workspace/code/04_evaluation.R
+ ```
