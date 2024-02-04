@@ -24,12 +24,6 @@
 ## Methods
 ### Environment Setup for R
  - server: to install r-env
-
-Example:
-```bash
-Rscript /work/a06/stakahashi/workspace/code/01_func.R
-```
-      
  - local: to install Rstudio
 
 ### GAMLSS fitting
