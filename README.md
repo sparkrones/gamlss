@@ -36,7 +36,8 @@ Rscript /work/a06/stakahashi/workspace/code/01_func.R
 1. find (ix, iy) of the research point
    - Please replace "LAT" and "LON" with latitude and longitude of your own research point
  ```bash
- /work/a06/stakahashi/workspace/glb_06min/src_param/get_rivinfo latlon "LAT" "LON"
+ cd /work/a06/stakahashi/workspace/glb_06min/src_param
+ ./get_rivinfo latlon "LAT" "LON"
  ```
 
 2. extract annual max outflow (AMAX), which is calculated by CaMa-Flood, from 1980 to 2100
