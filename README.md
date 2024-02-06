@@ -30,7 +30,7 @@
 1. find (ix, iy) of the research point
    - Please replace "LAT" and "LON" with latitude and longitude of your own research point
  ```bash
- cd /work/a06/stakahashi/workspace/glb_06min/src_param
+ cd /work/a06/stakahashi/glb_06min/src_param
  ```
  ```bash
  ./get_rivinfo latlon "LAT" "LON"
