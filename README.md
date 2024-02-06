@@ -38,7 +38,7 @@
 
 2. extract annual max outflow (AMAX), which is calculated by CaMa-Flood, from 1980 to 2100
  ```bash
- python /work/a06/stakahashi/workspace/code/01_max_extract.py
+ python /work/a06/stakahashi/workspace/01_max_extract.py
  ```
 
 3. estimate 100-year flood benchmark from stationary gumbel distribution
@@ -47,17 +47,17 @@
    - return period (corresponding to non-exceedance prob)
    - to estimate the 100-year flood: qGU()
  ```bash
- Rscript /work/a06/stakahashi/workspace/code/02_gamlss.R
+ Rscript /work/a06/stakahashi/workspace/02_gamlss.R
  ```
 
   
 ### OSSE
 1. generate complemented 5000 dataset (execute only once): rGU()
  ```bash
- Rscript /work/a06/stakahashi/workspace/code/03_osse2csv.R
+ Rscript /work/a06/stakahashi/workspace/03_osse2csv.R
  ```
 
 2. calculate error values in several ensembles and plot error distribution (n=100) in each ensemble
  ```bash
- Rscript /work/a06/stakahashi/workspace/code/04_evaluation.R
+ Rscript /work/a06/stakahashi/workspace/04_evaluation.R
  ```
