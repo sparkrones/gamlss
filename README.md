@@ -1,14 +1,14 @@
 # gamlss
 
 ## code explanation
- - 00_max_extract.py: to extract annual max outflows (1980-2100) from designated point (ix, iy)
- - 01_func.R: all functions
+ - 00_func.R: all functions
     - osse(mu, sigma): to generate osse dataset used in 03_osse2csv.R
     - gamlss_mdl(osse_data, e): to try the designated number of ensembles in gamlss
     - gumbel_mdl(osse_data, e): to try the designated number of ensembles in stationary gumbel
     - evaluation(truth_model, gamlss e_df, stationary e_df, e): to calculate error values in the designated number of ensembles and their standard deviations, normally used in eval_dist()
     - eval_dist(n,  osse_data, e, model): to calculate error distribution of the designated number of samples
       
+ - 01_max_extract.py: to extract annual max outflows (1980-2100) from designated point (ix, iy)
  - 02_gamlss.R: to fit annual max outflows to gamlss
  - 03_osse2csv.R: to export the osse dataset in the designated number of ensembles to a csv/binary file
  - 04_evaluation.R: to examine error distributions and their standard deviation of gamlss and stationary estimations
@@ -38,7 +38,7 @@
 
 2. extract annual max outflow (AMAX), which is calculated by CaMa-Flood, from 1980 to 2100
  ```bash
- python /work/a06/stakahashi/workspace/code/00_max_extract.py
+ python /work/a06/stakahashi/workspace/code/01_max_extract.py
  ```
 
 3. estimate 100-year flood benchmark from stationary gumbel distribution
