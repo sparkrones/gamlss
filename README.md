@@ -14,9 +14,10 @@
  - server: to install r-env
 ```bash
  conda install conda-forge::r-renv
- ```
+```
 
- - local: to install Rstudio
+ - local: to install Rstudio n/
+   download from here: https://cran.r-project.org/
 
 ### GAMLSS fitting
 1. find (ix, iy) of the research point
@@ -33,7 +34,7 @@
  python /work/a06/stakahashi/workspace/01_max_extract.py
  ```
 
-3. estimate 100-year flood benchmark from stationary gumbel distribution
+3. estimate the 100-year flood benchmark from stationary gumbel distribution
 4. fit 120 years AMAX to GAMLSS model (gumbel distribution in linear)   # 02_gamlss.R
    - non-exceedance probabilities of the benchmark 100-year flood calculated above: pGU()
    - return period (corresponding to non-exceedance prob)
@@ -55,7 +56,7 @@
  ```
 
 
-## about each file
+## About each file
  - 00_func.R: all functions
     - osse(mu, sigma): to generate osse dataset used in 03_osse2csv.R
     - gamlss_mdl(osse_data, e): to try the designated number of ensembles in gamlss
@@ -68,6 +69,6 @@
  - 03_osse2csv.R: to export the osse dataset in the designated number of ensembles to a csv/binary file
  - 04_evaluation.R: to examine error distributions and their standard deviation of gamlss and stationary estimations
 
-### output dataset's variables
+### Output dataset's variables
  - df: year, outflow, f_hundred, r, nonx_prob
  - e_df: year, outflow, f_hundred
