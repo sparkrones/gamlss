@@ -16,7 +16,7 @@
  conda install conda-forge::r-renv
 ```
 
- - local: to install Rstudio n/
+ - local: to install Rstudio - 
    download from here: https://cran.r-project.org/
 
 ### GAMLSS fitting
