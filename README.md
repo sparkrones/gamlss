@@ -45,7 +45,7 @@
 
   
 ### 2. OSSE
-1. generate complemented 5000 dataset (execute only once): rGU()
+1. generate complemented 3000 dataset (execute only once): rGU()
  ```bash
  Rscript /work/a06/stakahashi/workspace/03_osse2csv.R
  ```
