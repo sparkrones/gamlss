@@ -6,10 +6,10 @@
  - Language: R
    - Library: GAMLSS (non-stationary) and extRemes 2.0 (stationary)
 
-
-
-
 ## Methods
+![RA_gamlss (2)](https://github.com/sparkrones/gamlss/assets/82133070/16966149-d761-49a1-99f9-79649cc98998)
+
+
 ### Environment Setup for R
  - server: to install r-env
 ```bash
