@@ -24,6 +24,10 @@
 ## Methods
 ### Environment Setup for R
  - server: to install r-env
+```bash
+ conda install conda-forge::r-renv
+ ```
+
  - local: to install Rstudio
 
 ### GAMLSS fitting
