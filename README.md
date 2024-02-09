@@ -7,9 +7,6 @@
    - Library: GAMLSS (non-stationary) and extRemes 2.0 (stationary)
 
 ## Methods
-![RA_gamlss (2)](https://github.com/sparkrones/gamlss/assets/82133070/16966149-d761-49a1-99f9-79649cc98998)
-
-
 ### Environment Setup for R
  - server: to install r-env
 ```bash
@@ -19,7 +16,10 @@
  - local: to install Rstudio - 
    download from here: https://cran.r-project.org/
 
-### GAMLSS fitting
+![RA_gamlss (2)](https://github.com/sparkrones/gamlss/assets/82133070/16966149-d761-49a1-99f9-79649cc98998)
+
+
+### 1. GAMLSS fitting
 1. find (ix, iy) of the research point
    - Please replace "LAT" and "LON" with latitude and longitude of your own research point
  ```bash
@@ -44,7 +44,7 @@
  ```
 
   
-### OSSE
+### 2. OSSE
 1. generate complemented 5000 dataset (execute only once): rGU()
  ```bash
  Rscript /work/a06/stakahashi/workspace/03_osse2csv.R
