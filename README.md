@@ -1,25 +1,13 @@
 # gamlss
 
-## code explanation
- - 00_func.R: all functions
-    - osse(mu, sigma): to generate osse dataset used in 03_osse2csv.R
-    - gamlss_mdl(osse_data, e): to try the designated number of ensembles in gamlss
-    - gumbel_mdl(osse_data, e): to try the designated number of ensembles in stationary gumbel
-    - evaluation(truth_model, gamlss e_df, stationary e_df, e): to calculate error values in the designated number of ensembles and their standard deviations, normally used in eval_dist()
-    - eval_dist(n,  osse_data, e, model): to calculate error distribution of the designated number of samples
-      
- - 01_max_extract.py: to extract annual max outflows (1980-2100) from designated point (ix, iy)
- - 02_gamlss.R: to fit annual max outflows to gamlss
- - 03_osse2csv.R: to export the osse dataset in the designated number of ensembles to a csv/binary file
- - 04_evaluation.R: to examine error distributions and their standard deviation of gamlss and stationary estimations
-
-### output dataset's variables
- - df: year, outflow, f_hundred, r, nonx_prob
- - e_df: year, outflow, f_hundred
-
-
-
 ## Overview
+ - Target of Research: Iwabuchi Water Gate (Arakawa)
+ - Dataset: annual max outflow (1980-2099) calculated by CaMa-Flood (ssp2-4.5)
+ - Language: R
+   - Library: GAMLSS (non-stationary) and extRemes 2.0 (stationary)
+
+
+
 
 ## Methods
 ### Environment Setup for R
@@ -65,3 +53,21 @@
  ```bash
  Rscript /work/a06/stakahashi/workspace/04_evaluation.R
  ```
+
+
+## about each file
+ - 00_func.R: all functions
+    - osse(mu, sigma): to generate osse dataset used in 03_osse2csv.R
+    - gamlss_mdl(osse_data, e): to try the designated number of ensembles in gamlss
+    - gumbel_mdl(osse_data, e): to try the designated number of ensembles in stationary gumbel
+    - evaluation(truth_model, gamlss e_df, stationary e_df, e): to calculate error values in the designated number of ensembles and their standard deviations, normally used in eval_dist()
+    - eval_dist(n,  osse_data, e, model): to calculate error distribution of the designated number of samples
+      
+ - 01_max_extract.py: to extract annual max outflows (1980-2100) from designated point (ix, iy)
+ - 02_gamlss.R: to fit annual max outflows to gamlss
+ - 03_osse2csv.R: to export the osse dataset in the designated number of ensembles to a csv/binary file
+ - 04_evaluation.R: to examine error distributions and their standard deviation of gamlss and stationary estimations
+
+### output dataset's variables
+ - df: year, outflow, f_hundred, r, nonx_prob
+ - e_df: year, outflow, f_hundred
