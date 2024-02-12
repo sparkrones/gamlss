@@ -17,21 +17,39 @@ library(dplyr)
 
 
 # 03_osse2csv.R: random generation from GAMLSS fitted to 120 years AMAX
-osse <- function(mu, sigma) {
-  y <- rGU(120, mu, sigma)
-  
-  for (i in seq_along(y)) {
-    nonx[i] <- pGU(y[i], mu = mu[i], sigma = sigma[i])
-    rp[i] <- 1 / (1 - nonx[i])
+osse <- function(mu, sigma, amax) {
+  repeat {
+    y <- rGU(120, mu, sigma)
+    df <- cbind(data.frame(amax$year, y))
+    colnames(df) <- c("year", "outflow")
     
-    if (nonx[i] < 0.5) {
-      q2[i] <- qGU((1 - 1/2), mu = mu[i], sigma = sigma[i])
-      q3[i] <- qGU((1 - 1/3), mu = mu[i], sigma = sigma[i])
+    # fit newly generated data to gamlss
+    n_model <- gamlss(outflow ~ year, mu.fo = ~ year, sigma.fo = ~ year, family = "GU", data = df)
+    n_mu <- lpred(n_model, what = "mu", type = "response")
+    n_sigma <- lpred(n_model, what = "sigma", type = "response")
+    
+    for (i in seq_along(y)) {
+      nonx[i] <- pGU(y[i], mu = n_mu[i], sigma = n_sigma[i])
+      rp[i] <- 1 / (1 - nonx[i])
       
-      y[i] <- (q3[i] - q2[i]) * rp[i]  + 3 * q2[i] - 2 * q3[i]
+      if (nonx[i] < 0.5) {
+        q2[i] <- qGU((1 - 1/2), mu = n_mu[i], sigma = n_sigma[i])
+        q3[i] <- qGU((1 - 1/3), mu = n_mu[i], sigma = n_sigma[i])
+        
+        df$outflow[i] <- (q3[i] - q2[i]) * rp[i]  + 3 * q2[i] - 2 * q3[i]
+      }
+    }
+    
+    # check whether all 120 outflows are positive
+    all_positive <- all(df$outflow >= 0)
+    
+    # if complemented data is still negative, recalculate
+    if (all_positive) {
+      break
     }
   }
-  return(y)
+  
+  return(list(outflow = df$outflow, q2 = q2, q3 = q3))
 }
 
 
@@ -41,11 +59,11 @@ gamlss_mdl <- function(data, e) {
   # extract dataset in the number of ensembles
   n_osse <- length(data)
   index <- sample(1:n_osse, e, replace = FALSE)
-  y_120 <- data[index, ]
+  y_120 <- data[index]
   
   # reshape 120*3 -> 360*1
   outflow <- y_120 %>% 
-    gather(value = "Value") %>%
+    gather(key = "variable", value = "Value") %>%
     pull()
   
   # adjust the length of years to the number of osse
@@ -55,8 +73,8 @@ gamlss_mdl <- function(data, e) {
   df <- cbind(data.frame(year, outflow))
   
   
-  # gamlss
-  model <- gamlss(outflow ~ year, mu.fo = ~year, sigma.fo = ~ year, family = "GU", data = df)
+  # gamlss fitting
+  model <- gamlss(outflow ~ year, mu.fo = ~ year, sigma.fo = ~ year, family = "GU", data = df)
   mu <- lpred(model, what = "mu", type = "response")
   sigma <- lpred(model, what = "sigma", type = "response")
 
@@ -77,11 +95,11 @@ gumbel_mdl <- function(data, e) {
   # extract dataset in the number of ensembles
   n_osse <- length(data)
   index <- sample(1:n_osse, e, replace = FALSE)
-  y_120 <- data[index, ]
+  y_120 <- data[index]
 
   # reshape
   outflow <- y_120 %>% 
-    gather(value = "Value") %>%
+    gather(key = "variable", value = "Value") %>%
     pull()
   
   # adjust the length of years to the number of osse
@@ -127,7 +145,6 @@ evaluation <- function(model, gam_df, gum_df, e) {
 }
 
 
-# RMSE/MAE distribution of GAMLSS
 # eval_dist(the_number_of_experiments, data_parameter_of_mdl, e_parameter_of_mdl, truth_model_parameter_of_evaluation)
 eval_dist <- function(n, data, e, model) {
   gam_list <- list()
@@ -144,6 +161,3 @@ eval_dist <- function(n, data, e, model) {
 
   return(list(gam_list, gum_list))
 }
-
-
-# river stats
