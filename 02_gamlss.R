@@ -1,7 +1,7 @@
-source("C:/Users/cherr/Dropbox/VS Code/research/RA_GH/01_func.R") # change path to your own
+source("C:/Users/cherr/Dropbox/VS Code/research/RA_GH/00_func.R") # change path to your own
 
 # 1. import data
-path <- "C:/Users/cherr/Dropbox/VS Code/research/RA_GH/data/max_y120.bin" # change path to your own
+path <- "C:/Users/cherr/Dropbox/VS Code/research/RA_GH/data/shimanto_y120.bin" # change path to your own
 data <- readBin(path, numeric(), size = 4, n = 240, endian = "little")
 
 amax_list <- list()
@@ -44,3 +44,11 @@ hundred_f <- qGU(0.99, mu = mu, sigma = sigma)
 
 df <- data.frame(amax, hundred_f, r, nonx_prob)
 # write.csv(df, "df.csv")
+
+
+# plot the 100-year flood magnitude with amax
+plot(df$year, df$outflow, type = "p", pch = 16, col = "blue", xlab = "year", ylab = "annual max outflow [m^3/s]", main = "Nonstationary 100-year Flood Magnitudes (1980-2099)")
+lines(df$year, df$hundred_f, col = "red", lty = 1, lwd = 3)
+
+# return period
+# plot(df$year, df$r, type = 'l', col = "red", lty = 1, lwd = 3, xlab = "year", ylab = "return period [years]", main = "Return Period (1980-2099)")
