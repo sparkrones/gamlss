@@ -19,7 +19,6 @@ df_30 <- head(amax, 30)
 fit <- fevd(outflow, df_30, type = "Gumbel")
 # plot(fit)
 f_1980s <- as.vector(return.level(fit, return.period = 100))
-# print(f_1980s) # 1702.702
 
 # plot stationary gumbel distribution
 # plot(fit, type = "density", main = "Stationary Gumbel Distribution (1980-2009)", lwd = 2)
