@@ -7,6 +7,7 @@
 # install.packages("extRemes")
 # install.packages("tidyverse")
 # install.packages("dplyr")
+# install.packages("optparse")
 
 library(gamlss)
 library(gamlss.dist)
@@ -14,11 +15,12 @@ library(gamlss.data)
 library(extRemes)
 library(tidyverse)
 library(dplyr)
+library(optparse)
 
 
 # 03_osse2csv.R: random generation from GAMLSS fitted to 120 years AMAX
 osse <- function(mu, sigma, amax) {
-  repeat {
+  repeat{
     y <- rGU(120, mu, sigma)
     df <- cbind(data.frame(amax$year, y))
     colnames(df) <- c("year", "outflow")
@@ -29,27 +31,59 @@ osse <- function(mu, sigma, amax) {
     n_sigma <- lpred(n_model, what = "sigma", type = "response")
     
     for (i in seq_along(y)) {
-      nonx[i] <- pGU(y[i], mu = n_mu[i], sigma = n_sigma[i])
-      rp[i] <- 1 / (1 - nonx[i])
+      nonx <- pGU(y, mu = n_mu, sigma = n_sigma)
+      rp <- 1 / (1 - nonx)
+      q2 <- qGU((1 - 1/2), mu = n_mu, sigma = n_sigma)
+      q3 <- qGU((1 - 1/3), mu = n_mu, sigma = n_sigma)
       
-      if (nonx[i] < 0.5) {
-        q2[i] <- qGU((1 - 1/2), mu = n_mu[i], sigma = n_sigma[i])
-        q3[i] <- qGU((1 - 1/3), mu = n_mu[i], sigma = n_sigma[i])
-        
-        df$outflow[i] <- (q3[i] - q2[i]) * rp[i]  + 3 * q2[i] - 2 * q3[i]
+      if (nonx[[i]] < 0.5) {
+        df$outflow[[i]] <- (q3[[i]] - q2[[i]]) * rp[[i]]  + 3 * q2[[i]] - 2 * q3[[i]]
       }
     }
     
-    # check whether all 120 outflows are positive
     all_positive <- all(df$outflow >= 0)
     
-    # if complemented data is still negative, recalculate
     if (all_positive) {
       break
-    }
+    } 
   }
   
   return(list(outflow = df$outflow, q2 = q2, q3 = q3))
+}
+
+# set the minimum limit as 1980's (2*q2 - q3)
+osse_min <- function(mu, sigma, amax) {
+  repeat{
+    y <- rGU(120, mu, sigma)
+    df <- cbind(data.frame(amax$year, y))
+    colnames(df) <- c("year", "outflow")
+    
+    # fit newly generated data to gamlss
+    n_model <- gamlss(outflow ~ year, mu.fo = ~ year, sigma.fo = ~ year, family = "GU", data = df)
+    n_mu <- lpred(n_model, what = "mu", type = "response")
+    n_sigma <- lpred(n_model, what = "sigma", type = "response")
+    
+    for (i in seq_along(y)) {
+      nonx <- pGU(y, mu = n_mu, sigma = n_sigma)
+      rp <- 1 / (1 - nonx)
+      q2 <- qGU((1 - 1/2), mu = n_mu, sigma = n_sigma)
+      q3 <- qGU((1 - 1/3), mu = n_mu, sigma = n_sigma)
+      
+      # set the 1980's q1 as min limit
+      min_comp <- 2*q2[[1]] - q3[[1]]
+      
+      if (nonx[[i]] < 0.5) {
+        df$outflow[[i]] <- min_comp + (q2[[i]] - min_comp) * (rp[[i]] - 1)
+      }
+    }
+    all_positive <- all(df$outflow >= 0)
+    
+    if (all_positive) {
+      break
+    } 
+  }
+  
+  return(list(outflow = df$outflow, q2 = q2, q3 = q3, min = min_comp))
 }
 
 
@@ -135,7 +169,7 @@ evaluation <- function(model, gam_df, gum_df, e) {
   # the mean of the 100-year flood of last 30 years
   # error = estimated / truth - 1
   gam_30 <- mean(tail(gam_df$hundred_f, 30 * e))
-  gum_30 <- mean(tail(gum_df$hundred_f, 30 * e))
+  gum_30 <- gum_df$hundred_f[1]
   truth_30 <- mean(tail(truth, 30 * e))
 
   gam_error <- (gam_30 / truth_30) - 1
@@ -160,4 +194,31 @@ eval_dist <- function(n, data, e, model) {
   }
 
   return(list(gam_list, gum_list))
+}
+
+
+error_val <- function(osse_data, df, truth_mean) {
+  # osse mean
+  osse_model <- vector("list", length = ncol(osse_data))
+  osse_mu <- vector("list", length = ncol(osse_data))
+  osse_sigma <- vector("list", length = ncol(osse_data))
+  osse_mean_list <- vector("list", length = ncol(osse_data))
+  osse_means <- list()
+
+  for (i in seq_along(osse_data)) {
+    osse_df <- data.frame(cbind(df$year, osse_data[[i]]))
+    colnames(osse_df) <- c("year", paste0("outflow_", i))
+    
+    osse_formula <- formula(paste0("outflow_", i, " ~ year"))
+    osse_model[[i]] <- gamlss(formula = osse_formula, mu.fo = ~ year, sigma.fo = ~ year, family = "GU", data = osse_df)
+    osse_mu[[i]] <- lpred(osse_model[[i]], what = "mu", type = "response")
+    osse_sigma[[i]] <- lpred(osse_model[[i]], what = "sigma", type = "response")
+    
+    osse_mean_list[[i]] <- osse_mu[[i]] - osse_sigma[[i]] * 0.57722
+    osse_mean <- mean(unlist(tail(osse_mean_list[[i]], 30)))
+  }
+
+  error_v <- osse_mean / truth_mean - 1
+
+  return(error_v)
 }
