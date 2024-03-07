@@ -1,19 +1,22 @@
-source("C:/Users/cherr/Dropbox/VS Code/research/RA_GH/00_func.R")
-source("C:/Users/cherr/Dropbox/VS Code/research/RA_GH/02_gamlss.R")
+source("/work/a06/stakahashi/workspace/00_func.R")
+source("/work/a06/stakahashi/workspace/02_gamlss.R")
+
+
+# argument settings
+option_list <- list(
+  make_option(c("--osse-data"), type="character", help="File path to osse data", metavar="OSSE_DATA")
+)
+
+opt_parser <- OptionParser(usage="Usage: %prog --osse-data=OSSE_DATA", option_list=option_list)
+opt <- parse_args(opt_parser)
+
+if (is.null(opt$osse_data)) {
+  stop("Please specify the file path using --osse-data option.")
+}
+
 
 # import osse generation data
-osse_data <- read.csv("C:/Users/cherr/Dropbox/VS Code/research/RA_GH/data/shimanto_osse_df.csv")
-colnames(osse_data) <- c("year", "outflow", "hundred_f")
-
-# to get 3 ensemble's datasets of non-stationary & stationary
-e3gam_df <- gamlss_mdl(osse_data, 3)
-e3gum_df <- gumbel_mdl(osse_data, 3)
-# write.csv(e3gam_df, "e3gam_df.csv")
-# write.csv(e3gum_df, "e3gum_df.csv")
-
-# evaluation of the above datasets
-# print(evaluation(model, e3gam_df))
-# print(evaluation(model, e3gum_df))
+osse_data <- read.csv(opt$osse_data)
 
 
 # error distribution in various ensembles
@@ -74,11 +77,11 @@ lines(density(e15gum), col=8, lwd=2)
 legend("topright", legend = c("gamlss_e1", "gamlss_e3", "stationary_e1", "stationary_e3", "stationary_e6", "stationary_e9", "stationary_e12", "stationary_e15"), lty=1, lwd = 2, col=1:8)
 
 # only GAMLSS at Chikugo
-plot(density(e1gam), xlim = c(min(e3gam), max(e1gam)), ylim = c(0, 32), main="Error distribution of non-stationary (GAMLSS) estimations (n=100)", xlab="Error value", ylab="Density", col=2, lwd=2)
-lines(density(e3gam), col=3, lwd=2)
-lines(density(e6gam), col=4, lwd=2)
-lines(density(e9gam), col=5, lwd=2)
-lines(density(e12gam), col=6, lwd=2)
-lines(density(e15gam), col=7, lwd=2)
-lines(density(e30gam), col=8, lwd=2)
-legend("topright", legend = c("gamlss_e1", "gamlss_e3", "gamlss_e6", "gamlss_e9", "gamlss_e12", "gamlss_e15", "gamlss_e30"), lty=1, lwd = 2, col=2:8)
+# plot(density(e1gam), xlim = c(min(e3gam), max(e1gam)), ylim = c(0, 32), main="Error distribution of non-stationary (GAMLSS) estimations (n=100)", xlab="Error value", ylab="Density", col=2, lwd=2)
+# lines(density(e3gam), col=3, lwd=2)
+# lines(density(e6gam), col=4, lwd=2)
+# lines(density(e9gam), col=5, lwd=2)
+# lines(density(e12gam), col=6, lwd=2)
+# lines(density(e15gam), col=7, lwd=2)
+# lines(density(e30gam), col=8, lwd=2)
+# legend("topright", legend = c("gamlss_e1", "gamlss_e3", "gamlss_e6", "gamlss_e9", "gamlss_e12", "gamlss_e15", "gamlss_e30"), lty=1, lwd = 2, col=2:8)
