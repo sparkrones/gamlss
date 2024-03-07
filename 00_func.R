@@ -157,7 +157,6 @@ gumbel_mdl <- function(data, e) {
 }
 
 
-# evaluation: RMSE (Root Mean Squared Error), MAE (Mean Absolute Error)
 # evaluation(truth model, gamlss e_df, gumbel (stationary) e_df, the number of ensembles)
 # basically used in eval_dist()
 evaluation <- function(model, gam_df, gum_df, e) {
