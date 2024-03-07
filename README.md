@@ -69,8 +69,11 @@
 
 3. calculate error values in several ensembles and plot error distribution (n=100) in each ensemble
  ```bash 
- Rscript /work/a06/stakahashi/workspace/05_evaluation.R "PATH_TO_OSSE"
-
+ Rscript /work/a06/stakahashi/workspace/05_evaluation.R "PATH_TO_OSSE_FILE"
+ ```
+ > example
+ ```bash
+ Rscript /work/a06/stakahashi/workspace/05_evaluation.R "/work/a06/stakahashi/data/osse_df.csv"
  ```
 
 
