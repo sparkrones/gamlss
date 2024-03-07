@@ -1,7 +1,7 @@
 # gamlss
 
 ## Overview
- - Target of Research: Iwabuchi Water Gate (Arakawa)
+ - Target of Research: Iwabuchi Sluice Gate (Arakawa)
  - Dataset: annual max outflow (1980-2099) calculated by CaMa-Flood (ssp2-4.5)
  - Language: R
    - Library: GAMLSS (non-stationary) and extRemes 2.0 (stationary)
@@ -46,7 +46,7 @@
  ```bash
  Rscript /work/a06/stakahashi/workspace/02_gamlss.R <DATA_PATH>
  ```
- > example
+ > example: Iwabuchi (Arakawa)
  ```bash
  Rscript /work/a06/stakahashi/workspace/02_gamlss.R /work/a06/stakahashi/data/max_y120.bin
  ```
