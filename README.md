@@ -31,11 +31,11 @@
 
 2. extract annual max outflow (AMAX), which is calculated by CaMa-Flood, from 1980 to 2100
   ```bash
- python /work/a06/stakahashi/workspace/01_max_extract.py --ix <IX> --iy <IY> --output-file <OUTPUT_FILE_PATH>
+ python /work/a06/stakahashi/workspace/01_max_extract.py <IX> <IY> <OUTPUT_FILE_PATH>
  ```
  > example
  ```bash
- python /work/a06/stakahashi/workspace/01_max_extract.py --ix 3197 --iy 542 --output-file /work/a06/stakahashi/data/max_y125.bin
+ python /work/a06/stakahashi/workspace/01_max_extract.py 3197 542 /work/a06/stakahashi/data/max_y125.bin
  ```
 
 3. estimate the 100-year flood benchmark from stationary gumbel distribution
