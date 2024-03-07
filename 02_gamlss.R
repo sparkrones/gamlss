@@ -1,4 +1,4 @@
-source("C:/Users/cherr/Dropbox/VS Code/research/RA_GH/00_func.R")
+source("/work/a06/stakahashi/workspace/00_func.R")
 
 
 # 1. argument settings
