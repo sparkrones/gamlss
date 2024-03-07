@@ -44,7 +44,7 @@
    - return period (corresponding to non-exceedance prob)
    - to estimate the 100-year flood: qGU()
  ```bash
- Rscript /work/a06/stakahashi/workspace/02_gamlss.R
+ Rscript /work/a06/stakahashi/workspace/02_gamlss.R --data <DATA_PATH>
  ```
 
   
@@ -56,7 +56,8 @@
 
 2. calculate error values in several ensembles and plot error distribution (n=100) in each ensemble
  ```bash
- Rscript /work/a06/stakahashi/workspace/04_evaluation.R
+ Rscript /work/a06/stakahashi/workspace/04_evaluation.R --osse-data "PATH_TO_ARAKAWA_OSSE" --naka-osse "PATH_TO_NAKA_OSSE" --chikugo-osse "PATH_TO_CHIKUGO_OSSE" --shimanto-osse "PATH_TO_SHIMANTO_OSSE"
+
  ```
 
 
