@@ -195,30 +195,3 @@ eval_dist <- function(n, data, e, model) {
 
   return(list(gam_list, gum_list))
 }
-
-
-error_val <- function(osse_data, df, truth_mean) {
-  # osse mean
-  osse_model <- vector("list", length = ncol(osse_data))
-  osse_mu <- vector("list", length = ncol(osse_data))
-  osse_sigma <- vector("list", length = ncol(osse_data))
-  osse_mean_list <- vector("list", length = ncol(osse_data))
-  osse_means <- list()
-
-  for (i in seq_along(osse_data)) {
-    osse_df <- data.frame(cbind(df$year, osse_data[[i]]))
-    colnames(osse_df) <- c("year", paste0("outflow_", i))
-    
-    osse_formula <- formula(paste0("outflow_", i, " ~ year"))
-    osse_model[[i]] <- gamlss(formula = osse_formula, mu.fo = ~ year, sigma.fo = ~ year, family = "GU", data = osse_df)
-    osse_mu[[i]] <- lpred(osse_model[[i]], what = "mu", type = "response")
-    osse_sigma[[i]] <- lpred(osse_model[[i]], what = "sigma", type = "response")
-    
-    osse_mean_list[[i]] <- osse_mu[[i]] - osse_sigma[[i]] * 0.57722
-    osse_mean <- mean(unlist(tail(osse_mean_list[[i]], 30)))
-  }
-
-  error_v <- osse_mean / truth_mean - 1
-
-  return(error_v)
-}
