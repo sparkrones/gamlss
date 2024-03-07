@@ -46,17 +46,30 @@
  ```bash
  Rscript /work/a06/stakahashi/workspace/02_gamlss.R <DATA_PATH>
  ```
+ > example
+ ```bash
+ Rscript /work/a06/stakahashi/workspace/02_gamlss.R /work/a06/stakahashi/data/max_y120.bin
+ ```
 
   
 ### 2. OSSE
 1. generate complemented 3000 dataset (execute only once): rGU()
  ```bash
- Rscript /work/a06/stakahashi/workspace/03_osse2csv.R
+ Rscript /work/a06/stakahashi/workspace/03_osse2csv.R --output-path="OUTPUT_PATH"
+ ```
+ > example
+ ```bash
+ Rscript /work/a06/stakahashi/workspace/03_osse2csv.R --output-path="/work/a06/stakahashi/data/osse_df.csv"
  ```
 
-2. calculate error values in several ensembles and plot error distribution (n=100) in each ensemble
+(2. plot generated osse data)
+ ```bash
+ Rscript /work/a06/stakahashi/workspace/04_osse_plot.R
+ ```
+
+3. calculate error values in several ensembles and plot error distribution (n=100) in each ensemble
  ```bash 
- Rscript /work/a06/stakahashi/workspace/04_evaluation.R "PATH_TO_ARAKAWA_OSSE"
+ Rscript /work/a06/stakahashi/workspace/05_evaluation.R "PATH_TO_OSSE"
 
  ```
 
