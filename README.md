@@ -33,7 +33,7 @@
   ```bash
  python /work/a06/stakahashi/workspace/01_max_extract.py --ix <IX> --iy <IY> --output-file <OUTPUT_FILE_PATH>
  ```
-# example
+ example
  ```bash
  python /work/a06/stakahashi/workspace/01_max_extract.py --ix 3197 --iy 542 --output-file /work/a06/stakahashi/data/max_y125.bin
  ```
