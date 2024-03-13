@@ -66,14 +66,14 @@ osse_min <- function(mu, sigma, amax) {
     for (i in seq_along(y)) {
       nonx <- pGU(y, mu = n_mu, sigma = n_sigma)
       rp <- 1 / (1 - nonx)
-      q2 <- qGU((1 - 1/2), mu = n_mu, sigma = n_sigma)
-      q3 <- qGU((1 - 1/3), mu = n_mu, sigma = n_sigma)
+      q2 <- qGU((1 - 1/2), mu = mu, sigma = sigma)
+      q3 <- qGU((1 - 1/3), mu = mu, sigma = sigma)
       
       # set the 1980's q1 as min limit
-      min_comp <- 2*q2[[1]] - q3[[1]]
+      min_lmt <- 2*q2[[1]] - q3[[1]]
       
       if (nonx[[i]] < 0.5) {
-        df$outflow[[i]] <- min_comp + (q2[[i]] - min_comp) * (rp[[i]] - 1)
+        df$outflow[[i]] <- min_lmt + (q2[[i]] - min_lmt) * (rp[[i]] - 1)
       }
     }
     all_positive <- all(df$outflow >= 0)
@@ -83,7 +83,14 @@ osse_min <- function(mu, sigma, amax) {
     } 
   }
   
-  return(list(outflow = df$outflow, q2 = q2, q3 = q3, min = min_comp))
+  return(list(outflow = df$outflow, q2 = q2, q3 = q3, min = min_lmt))
+}
+
+
+count_min <- function(mu, sigma) {
+  x <- rGU(120, mu, sigma)
+  count <- sum(x < 0)
+  return(count)
 }
 
 
@@ -157,6 +164,7 @@ gumbel_mdl <- function(data, e) {
 }
 
 
+# evaluation: RMSE (Root Mean Squared Error), MAE (Mean Absolute Error)
 # evaluation(truth model, gamlss e_df, gumbel (stationary) e_df, the number of ensembles)
 # basically used in eval_dist()
 evaluation <- function(model, gam_df, gum_df, e) {
@@ -193,4 +201,31 @@ eval_dist <- function(n, data, e, model) {
   }
 
   return(list(gam_list, gum_list))
+}
+
+
+error_val <- function(osse_data, df, truth_mean) {
+  # osse mean
+  osse_model <- vector("list", length = ncol(osse_data))
+  osse_mu <- vector("list", length = ncol(osse_data))
+  osse_sigma <- vector("list", length = ncol(osse_data))
+  osse_mean_list <- vector("list", length = ncol(osse_data))
+  osse_means <- list()
+
+  for (i in seq_along(osse_data)) {
+    osse_df <- data.frame(cbind(df$year, osse_data[[i]]))
+    colnames(osse_df) <- c("year", paste0("outflow_", i))
+    
+    osse_formula <- formula(paste0("outflow_", i, " ~ year"))
+    osse_model[[i]] <- gamlss(formula = osse_formula, mu.fo = ~ year, sigma.fo = ~ year, family = "GU", data = osse_df)
+    osse_mu[[i]] <- lpred(osse_model[[i]], what = "mu", type = "response")
+    osse_sigma[[i]] <- lpred(osse_model[[i]], what = "sigma", type = "response")
+    
+    osse_mean_list[[i]] <- osse_mu[[i]] - osse_sigma[[i]] * 0.57722
+    osse_mean <- mean(unlist(tail(osse_mean_list[[i]], 30)))
+  }
+
+  error_v <- osse_mean / truth_mean - 1
+
+  return(error_v)
 }
