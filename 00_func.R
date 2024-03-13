@@ -87,13 +87,6 @@ osse_min <- function(mu, sigma, amax) {
 }
 
 
-count_min <- function(mu, sigma) {
-  x <- rGU(120, mu, sigma)
-  count <- sum(x < 0)
-  return(count)
-}
-
-
 # nonstationary GAMLSS
 # gamlss_mdl(osse_data, the_number_of_ensembles)
 gamlss_mdl <- function(data, e) {
@@ -164,7 +157,6 @@ gumbel_mdl <- function(data, e) {
 }
 
 
-# evaluation: RMSE (Root Mean Squared Error), MAE (Mean Absolute Error)
 # evaluation(truth model, gamlss e_df, gumbel (stationary) e_df, the number of ensembles)
 # basically used in eval_dist()
 evaluation <- function(model, gam_df, gum_df, e) {
