@@ -18,16 +18,18 @@ osse_list <- list()
 
 # generate OSSE from data designated at "data" in 02_gamlss.R
 for (i in 1:osse_num) {
-  generated <- osse(mu, sigma, amax)
+  generated <- osse_min(mu, sigma, amax)
   osse_list[[paste0("outflow_", i)]] <- generated$outflow
   osse_list[[paste0("q2_", i)]] <- generated$q2
   osse_list[[paste0("q3_", i)]] <- generated$q3
-  max_outflow <- max(unlist(generated$outflow))
-  # osse_list[[paste0("min_", i)]] <- rep(generated$min, 120)
+  osse_list[[paste0("min_", i)]] <- rep(generated$min, 120)
+  osse_list[[paste0("osseq2_", i)]] <- generated$osse2
+  osse_list[[paste0("osseq3_", i)]] <- generated$osse3
 }
 
-
 # export generated amax to csv file
-rand <- do.call(cbind, osse_list[grep("^outflow_", names(osse_list))])
-write.csv(rand, file = opt$output_path, row.names = FALSE)
+# rand <- do.call(cbind, osse_list[grep("^outflow_", names(osse_list))])
+# write.csv(rand, file = opt$output_path, row.names = FALSE)
+
+# export to binary file
 # writeBin(as.numeric(unlist(rand)), opt$output_path)
