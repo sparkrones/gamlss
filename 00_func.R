@@ -53,34 +53,27 @@ osse <- function(mu, sigma, amax) {
 
 # set the minimum limit as 1980's (2*q2 - q3)
 osse_min <- function(mu, sigma, amax) {
-  repeat{
-    y <- rGU(120, mu, sigma)
-    df <- cbind(data.frame(amax$year, y))
-    colnames(df) <- c("year", "outflow")
+  y <- rGU(120, mu, sigma)
+  df <- cbind(data.frame(amax$year, y))
+  colnames(df) <- c("year", "outflow")
+  
+  # fit newly generated data to gamlss
+  n_model <- gamlss(outflow ~ year, mu.fo = ~ year, sigma.fo = ~ year, family = "GU", data = df)
+  n_mu <- lpred(n_model, what = "mu", type = "response")
+  n_sigma <- lpred(n_model, what = "sigma", type = "response")
+  
+  for (i in seq_along(y)) {
+    nonx <- pGU(y, mu = n_mu, sigma = n_sigma)
+    rp <- 1 / (1 - nonx)
+    q2 <- qGU((1 - 1/2), mu = mu, sigma = sigma)
+    q3 <- qGU((1 - 1/3), mu = mu, sigma = sigma)
     
-    # fit newly generated data to gamlss
-    n_model <- gamlss(outflow ~ year, mu.fo = ~ year, sigma.fo = ~ year, family = "GU", data = df)
-    n_mu <- lpred(n_model, what = "mu", type = "response")
-    n_sigma <- lpred(n_model, what = "sigma", type = "response")
+    # set the 1980's q1 as min limit
+    min_lmt <- 2*q2[[1]] - q3[[1]]
     
-    for (i in seq_along(y)) {
-      nonx <- pGU(y, mu = n_mu, sigma = n_sigma)
-      rp <- 1 / (1 - nonx)
-      q2 <- qGU((1 - 1/2), mu = mu, sigma = sigma)
-      q3 <- qGU((1 - 1/3), mu = mu, sigma = sigma)
-      
-      # set the 1980's q1 as min limit
-      min_lmt <- 2*q2[[1]] - q3[[1]]
-      
-      if (nonx[[i]] < 0.5) {
-        df$outflow[[i]] <- min_lmt + (q2[[i]] - min_lmt) * (rp[[i]] - 1)
-      }
+    if (nonx[[i]] < 0.5) {
+      df$outflow[[i]] <- min_lmt + (q2[[i]] - min_lmt) * (rp[[i]] - 1)
     }
-    all_positive <- all(df$outflow >= 0)
-    
-    if (all_positive) {
-      break
-    } 
   }
   
   return(list(outflow = df$outflow, q2 = q2, q3 = q3, min = min_lmt))
