@@ -33,8 +33,12 @@ osse <- function(mu, sigma, amax) {
     for (i in seq_along(y)) {
       nonx <- pGU(y, mu = n_mu, sigma = n_sigma)
       rp <- 1 / (1 - nonx)
-      q2 <- qGU((1 - 1/2), mu = n_mu, sigma = n_sigma)
-      q3 <- qGU((1 - 1/3), mu = n_mu, sigma = n_sigma)
+      # truth 2-year/3-year outflow
+      q2 <- qGU((1 - 1/2), mu = mu, sigma = sigma)
+      q3 <- qGU((1 - 1/3), mu = mu, sigma = sigma)
+      # osse 2-year/3-year outflow
+      osse_q2 <- qGU((1 - 1/2), mu = n_mu, sigma = n_sigma)
+      osse_q3 <- qGU((1 - 1/3), mu = n_mu, sigma = n_sigma)
       
       if (nonx[[i]] < 0.5) {
         df$outflow[[i]] <- (q3[[i]] - q2[[i]]) * rp[[i]]  + 3 * q2[[i]] - 2 * q3[[i]]
@@ -48,7 +52,7 @@ osse <- function(mu, sigma, amax) {
     } 
   }
   
-  return(list(outflow = df$outflow, q2 = q2, q3 = q3))
+  return(list(outflow = df$outflow, q2 = q2, q3 = q3, osse2 = osse_q2, osse3 = osse_q3))
 }
 
 # set the minimum limit as 1980's (2*q2 - q3)
@@ -65,8 +69,12 @@ osse_min <- function(mu, sigma, amax) {
   for (i in seq_along(y)) {
     nonx <- pGU(y, mu = n_mu, sigma = n_sigma)
     rp <- 1 / (1 - nonx)
+    # truth 2-year/3-year outflow
     q2 <- qGU((1 - 1/2), mu = mu, sigma = sigma)
     q3 <- qGU((1 - 1/3), mu = mu, sigma = sigma)
+    # osse 2-year/3-year outflow
+    osse_q2 <- qGU((1 - 1/2), mu = n_mu, sigma = n_sigma)
+    osse_q3 <- qGU((1 - 1/3), mu = n_mu, sigma = n_sigma)
     
     # set the 1980's q1 as min limit
     min_lmt <- 2*q2[[1]] - q3[[1]]
@@ -76,7 +84,14 @@ osse_min <- function(mu, sigma, amax) {
     }
   }
   
-  return(list(outflow = df$outflow, q2 = q2, q3 = q3, min = min_lmt))
+  return(list(outflow = df$outflow, q2 = q2, q3 = q3, min = min_lmt, osse2 = osse_q2, osse3 = osse_q3))
+}
+
+
+count_min <- function(mu, sigma) {
+  x <- rGU(120, mu, sigma)
+  count <- sum(x < 0)
+  return(count)
 }
 
 
@@ -150,6 +165,7 @@ gumbel_mdl <- function(data, e) {
 }
 
 
+# evaluation: RMSE (Root Mean Squared Error), MAE (Mean Absolute Error)
 # evaluation(truth model, gamlss e_df, gumbel (stationary) e_df, the number of ensembles)
 # basically used in eval_dist()
 evaluation <- function(model, gam_df, gum_df, e) {
