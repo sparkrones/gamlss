@@ -10,7 +10,7 @@
 ### Environment Setup for R
  - server: to install r-env
 ```bash
- conda install conda-forge::r-renv
+ conda install r-cran-renv
 ```
 
  - local: to install Rstudio - 
