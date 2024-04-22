@@ -35,7 +35,7 @@
  ```
  > example
  ```bash
- python /work/a06/stakahashi/workspace/01_max_extract.py 3197 542 amazon /work/a06/stakahashi/data
+ python /work/a06/stakahashi/workspace/01_max_extract.py 3104 567 chikugo /work/a06/stakahashi/data
  ```
 
 3. estimate the 100-year flood benchmark from stationary gumbel distribution
