@@ -14,7 +14,7 @@
 ```
 
  - local: to install Rstudio - 
-   download from here: https://cran.r-project.org/
+   download from here: [https://cran.r-project.org/](https://posit.co/download/rstudio-desktop/)
 
 ![RA_gamlss (2)](https://github.com/sparkrones/gamlss/assets/82133070/16966149-d761-49a1-99f9-79649cc98998)
 
