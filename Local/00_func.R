@@ -1,17 +1,3 @@
-# install packages
-# remove # (if you haven't install packages) or comment-out (if you have already installed them)
-
-# install.packages("gamlss")
-# install.packages("gamlss.dist")
-# install.packages("gamlss.data")
-# install.packages("extRemes")
-# install.packages("tidyverse")
-# install.packages("dplyr")
-# install.packages("optparse")
-# install.packages("gridExtra")
-# install.packages("gt")
-# install.packages("grid")
-
 library(gamlss)
 library(gamlss.dist)
 library(gamlss.data)
