@@ -310,8 +310,8 @@ osse <- function(path, osse_num) {
   # generate OSSE from data designated at "path" in 02_gamlss.R
   for (i in 1:osse_num) {
     # choose which osse generation method to use
-    # generated <- osse_min(path)   # non-stationary
-    generated <- osse_min_stat(path)   # stationary mean and variance
+    generated <- osse_min(path)   # non-stationary
+    # generated <- osse_min_stat(path)   # stationary mean and variance
     # generated <- osse_min_mean(path)   # stationary mean and non-stationary variance
     osse_list[[paste0("outflow_", i)]] <- generated$outflow
     osse_list[[paste0("q2_", i)]] <- generated$osse2
